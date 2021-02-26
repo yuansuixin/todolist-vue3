@@ -22,15 +22,45 @@
     <small class="form-text text-muted">回车即可加入</small>
   </div>
   <div class="list-group">
-    <li class="list-group-item" v-for="item in todos" :key="item.id">
-      {{ item }}
+    <li
+      class="list-group-item d-flex align-item-center justify-content-between"
+      v-for="item in todos"
+      :key="item.id"
+      @click.stop="check(item)"
+    >
+      <div class="form-check">
+        <input
+          type="checkbox"
+          class="form-checkinput"
+          :id="item.id"
+          :checked="item.state === TodoItemState.DONE"
+          :disabled="item.state === TodoItemState.DELETE"
+        />
+        <label
+          :for="item.id"
+          @click.stop.prevent="check(item)"
+          :class="{
+            'text-black-50 line-through': item.state == TodoItemState.Done
+          }"
+          >{{ item }}</label
+        >
+      </div>
+      <div
+        class="float-right ctrls"
+        :class="{ 'd-none': item.state !== TodoItemState.OPEN }"
+      >
+        <div class="btn btn-warning btn-sm mr-2 text-light">编辑</div>
+        <div class="btn btn-danger btn-sm">删除</div>
+      </div>
     </li>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, defineComponent, reactive, ref } from 'vue'
 import store from '@/store'
+import { TodoItemState } from '@/common/const'
+import { TodoItem } from '@/common/interface'
 
 export default defineComponent({
   setup() {
@@ -39,13 +69,33 @@ export default defineComponent({
       console.log(inputValue.value)
       store.commit('add', inputValue.value)
     }
+    const check = (item: TodoItem) => {
+      store.commit('check', item.id)
+    }
     return reactive({
       inputValue,
       add,
+      TodoItemState,
+      check,
       todos: computed(() => store.state.todos)
     })
   }
 })
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.line-through {
+  text-decoration: line-through;
+}
+.list-group-item {
+  user-select: none;
+  &:hover {
+    .ctrls {
+      display: block;
+    }
+  }
+  .ctrls {
+    display: none;
+  }
+}
+</style>
