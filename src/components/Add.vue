@@ -42,14 +42,19 @@
           :class="{
             'text-black-50 line-through': item.state == TodoItemState.Done
           }"
-          >{{ item }}</label
+          >{{ item.text }}</label
         >
       </div>
       <div
         class="float-right ctrls"
         :class="{ 'd-none': item.state !== TodoItemState.OPEN }"
       >
-        <div class="btn btn-warning btn-sm mr-2 text-light">编辑</div>
+        <div
+          class="btn btn-warning btn-sm mr-2 text-light"
+          @click.stop="edit(item)"
+        >
+          编辑
+        </div>
         <div class="btn btn-danger btn-sm" @click.stop="remove(item.id)">
           删除
         </div>
@@ -64,6 +69,7 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, ref } from 'vue'
 import store from '@/store'
+import router from '@/router'
 import { TodoItemState } from '@/common/const'
 import { TodoItem } from '@/common/interface'
 
@@ -102,6 +108,11 @@ export default defineComponent({
       }
     }
 
+    const edit = (item: TodoItemState) => {
+      store.commit('saveEditItem', item)
+      router.push({ name: 'edit' })
+    }
+
     return reactive({
       inputValue,
       add,
@@ -111,6 +122,7 @@ export default defineComponent({
       filterState,
       filterItem,
       hide,
+      edit,
       todos: computed(() => filterItem(filterState.value))
     })
   }

@@ -15,4 +15,3 @@ export const storage = {
   get: () => JSON.parse(localStorage.getItem('latest_todos') || '[]'),
   set: (value: any) => localStorage.setItem('latest_todos', JSON.stringify(value))
 }
-

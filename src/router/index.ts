@@ -33,7 +33,14 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/edit',
         name: 'edit',
-        component: Edit
+        component: Edit,
+        beforeEnter: (to, from, next) => {
+          if (from.path === '/add') {
+            next()
+          } else {
+            next('/add')
+          }
+        }
       }
     ]
   }
