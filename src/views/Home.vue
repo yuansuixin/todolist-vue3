@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-light mb-4">
       <a class="navbar-brand d-flex align-items-center" href="#">
         <div class="logo mr-2"></div>
-        <span>ToDoList dev 更改1</span>
+        <span>ToDoList dev 更改1 更改2</span>
       </a>
       lalallaal
 
